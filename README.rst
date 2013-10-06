@@ -32,7 +32,7 @@ Use with Python:
 
     >>> from uptimerobot.uptimerobot import UptimeRobot
     >>> up = UptimeRobot(UPTIME_ROBOT_API_KEY)
-    >>> up.addMonitor("arteria Webpage", "https://www.arteria.ch/")
+    >>> up.addMonitor("arteria-webpage", "https://www.arteria.ch/")
     True
 
 
@@ -42,7 +42,7 @@ Use in Shell: (success if return value is 0, null)
 
     cd /path/to/script/
     chmod 755 uptimerobot.py # if necessary
-    ./uptimerobot.py monitorFriendlyName=Risiko monitorURL=http://www.risiko.arteria.ch/de/risk/list/
+    ./uptimerobot.py monitorFriendlyName=arteria-webpage monitorURL=https://www.arteria.ch/
 
 
 
