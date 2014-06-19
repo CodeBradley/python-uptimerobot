@@ -39,19 +39,16 @@ def read(fname):
         return ''
 
 setup(
-    name="django-uptimerobot",
+    name="python-uptimerobot",
     version=app.__version__,
     description=read('DESCRIPTION'),
     long_description=read('README.rst'),
     license='The MIT License',
     platforms=['OS Independent'],
-    keywords='django, uptime robot, API, monitoring',
+    keywords='uptime robot, API, monitoring',
     author='arteria GmbH',
     author_email='admin.ch',
-    url="https://github.com/arteria.ch/django-uptimerobot",
+    url="https://github.com/arteria/python-uptimerobot",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[
-        'django',
-    ],
 )
