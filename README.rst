@@ -18,7 +18,7 @@ To get the latest commit from GitHub
 
 .. code-block:: bash
 
-    $ pip install -e git+git://github.com/arteria.ch/python-uptimerobot.git#egg=uptimerobot
+    $ pip install -e git+git://github.com/arteria/python-uptimerobot.git#egg=uptimerobot
 
  
 
