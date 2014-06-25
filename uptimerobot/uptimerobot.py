@@ -5,6 +5,7 @@ import json
 import sys
 import os
 import ConfigParser
+from __future__ import print_function
 
 monitorFriendlyName = None
 monitorURL = None
@@ -101,15 +102,15 @@ if __name__ == "__main__":
             Config.read(pathToSettings)
             apiKey = Config.get("api", 'apiKey')
         except Exception as e:
-            print e
+            print(e)
             apiKey = raw_input("Can't continue without apiKey: ")
             settingsFile = open(pathToSettings, 'w')
             settingsFile.write("; Settings for django-uptimerobot\n[api]\napiKey=%s" % apiKey)
 
     up = UptimeRobot(apiKey)
     if up.addMonitor(monitorFriendlyName, monitorURL):
-        print "A new Monitor was installed successfully"
+        print("A new Monitor was installed successfully")
         sys.exit(0)
     else:
-        print "There were some Errors, mayme the Monitor already exists?"
+        print("There were some Errors, mayme the Monitor already exists?")
         sys.exit(1)
