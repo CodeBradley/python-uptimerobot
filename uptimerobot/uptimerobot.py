@@ -100,7 +100,7 @@ if __name__ == "__main__":
             Config = ConfigParser.ConfigParser()
             Config.read(pathToSettings)
             apiKey = Config.get("api", 'apiKey')
-        except Exception, e:
+        except Exception as e:
             print e
             apiKey = raw_input("Can't continue without apiKey: ")
             settingsFile = open(pathToSettings, 'w')
