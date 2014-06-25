@@ -103,7 +103,7 @@ if __name__ == "__main__":
         homeDir = os.environ['HOME']
         pathToSettings = homeDir + "/.uptimeRobot.ini"
         try:
-            Config = configparser.ConfigParser()
+            Config = ConfigParser.ConfigParser()
             Config.read(pathToSettings)
             apiKey = Config.get("api", 'apiKey')
         except Exception as e:
