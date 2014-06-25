@@ -108,7 +108,10 @@ if __name__ == "__main__":
             apiKey = Config.get("api", 'apiKey')
         except Exception as e:
             print(e)
-            apiKey = eval(input("Can't continue without apiKey: "))
+            try:
+                apiKey = raw_input("Can't continue without apiKey: ")
+            except NameError:
+                apiKey = input("Can't continue without apiKey: ")
             settingsFile = open(pathToSettings, 'w')
             settingsFile.write("; Settings for django-uptimerobot\n[api]\napiKey=%s" % apiKey)
 
