@@ -11,8 +11,8 @@ Installation
 To get the latest stable release from PyPi
 
 .. code-block:: bash
-	# TODO:
-    $ pip install python-uptimerobot
+	
+	$ pip install python-uptimerobot
 
 To get the latest commit from GitHub
 
@@ -47,6 +47,10 @@ Use in Shell: (success if return value is 0, null)
 
 History
 -------
+
+0.1.0
+
+- Releveled version
 
 0.0.7
 
