@@ -45,22 +45,9 @@ Use in Shell: (success if return value is 0, null)
     ./uptimerobot.py monitorFriendlyName=arteria-webpage monitorURL=https://www.arteria.ch/
 
 
+History
+-------
 
-Contribute
-----------
+0.0.7
 
-If you want to contribute to this project, please perform the following steps
-
-.. code-block:: bash
-
-    # Fork this repository
-    # Clone your fork
-    $ mkvirtualenv -p python2.7 django-uptimerobot
-    $ python setup.py install
-    $ pip install -r dev_requirements.txt
-
-    $ git co -b feature_branch master
-    # Implement your feature and tests
-    $ git add . && git commit
-    $ git push -u origin feature_branch
-    # Send us a pull request for your feature branch
+- Python 3.x support
