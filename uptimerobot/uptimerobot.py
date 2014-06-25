@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 
-import urllib2
+try:
+    import urllib.request as urllib_request
+except ImportError:
+    import urllib2 as urllib_request
 import json
 import sys
 import os
-import ConfigParser
-from __future__ import print_function
+try:
+    import configparser as ConfigParser
+except ImportError:
+    import ConfigParser
 
 monitorFriendlyName = None
 monitorURL = None
@@ -69,8 +74,8 @@ class UptimeRobot(object):
         return None, None
 
     def requestApi(self, url):
-        response = urllib2.urlopen(url)
-        content = response.read()
+        response = urllib_request.urlopen(url)
+        content = response.read().decode('utf-8')
         jContent = json.loads(content)
 
         if jContent.get('stat'):
@@ -98,12 +103,12 @@ if __name__ == "__main__":
         homeDir = os.environ['HOME']
         pathToSettings = homeDir + "/.uptimeRobot.ini"
         try:
-            Config = ConfigParser.ConfigParser()
+            Config = configparser.ConfigParser()
             Config.read(pathToSettings)
             apiKey = Config.get("api", 'apiKey')
         except Exception as e:
             print(e)
-            apiKey = raw_input("Can't continue without apiKey: ")
+            apiKey = eval(input("Can't continue without apiKey: "))
             settingsFile = open(pathToSettings, 'w')
             settingsFile.write("; Settings for django-uptimerobot\n[api]\napiKey=%s" % apiKey)
 
