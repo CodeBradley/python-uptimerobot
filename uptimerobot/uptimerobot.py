@@ -19,13 +19,14 @@ monitorAlertContacts = ""
 
 
 class UptimeRobot(object):
-    """docstring for UptimeRobot"""
     def __init__(self, apiKey):
         self.apiKey = apiKey
         self.baseUrl = "http://api.uptimerobot.com/"
 
     def addMonitor(self, monitorFriendlyName, monitorURL):
-        """retuns True if Monitor was added, otherwise False"""
+        """
+        Returns True if Monitor was added, otherwise False.
+        """
         url = self.baseUrl
         url += "newMonitor?apiKey=%s" % self.apiKey
         url += "&monitorFriendlyName=%s" % monitorFriendlyName
@@ -39,8 +40,25 @@ class UptimeRobot(object):
         else:
             return False
 
+    def getMonitors(self):
+        """ 
+        Returns status and alltimeuptimeratio for all known monitors.
+        """
+        url = self.baseUrl
+        url += "getMonitors?apiKey=%s" % (self.apiKey)
+        url += "&noJsonCallback=1&format=json"
+
+        sucess, response = self.requestApi(url)
+        if sucess:
+            status = response.get('monitors').get('monitor')[0].get('status')
+            alltimeuptimeratio = response.get('monitors').get('monitor')[0].get('alltimeuptimeratio')
+            return status, alltimeuptimeratio
+
+        return None, None
+        
     def getMonitorById(self, monitorId):
-        """returns monitor status and alltimeuptimeratio for a MonitorId
+        """
+        Returns monitor status and alltimeuptimeratio for a MonitorId.
         """
         url = self.baseUrl
         url += "getMonitors?apiKey=%s&monitors=%s" % (self.apiKey, monitorId)
@@ -55,7 +73,8 @@ class UptimeRobot(object):
         return None, None
 
     def getMonitorByName(self, monitorFriendlyName):
-        """returns monitor status and alltimeuptimeratio for a MonitorFriendlyName
+        """
+        Returns monitor status and alltimeuptimeratio for a MonitorFriendlyName.
         """
         url = self.baseUrl
         url += "getMonitors?apiKey=%s" % self.apiKey
