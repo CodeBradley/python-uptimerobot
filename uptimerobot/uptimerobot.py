@@ -42,7 +42,7 @@ class UptimeRobot(object):
 
     def getMonitors(self):
         """ 
-        Returns status and alltimeuptimeratio for all known monitors.
+        Returns status and response payload for all known monitors.
         """
         url = self.baseUrl
         url += "getMonitors?apiKey=%s" % (self.apiKey)
@@ -50,9 +50,7 @@ class UptimeRobot(object):
 
         sucess, response = self.requestApi(url)
         if sucess:
-            status = response.get('monitors').get('monitor')[0].get('status')
-            alltimeuptimeratio = response.get('monitors').get('monitor')[0].get('alltimeuptimeratio')
-            return status, alltimeuptimeratio
+            return status, response
 
         return None, None
         
