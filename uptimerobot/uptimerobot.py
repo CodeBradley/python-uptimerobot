@@ -22,7 +22,8 @@ class UptimeRobot(object):
     def __init__(self, apiKey):
         self.apiKey = apiKey
         self.baseUrl = "http://api.uptimerobot.com/"
-
+        
+        
     def addMonitor(self, monitorFriendlyName, monitorURL):
         """
         Returns True if Monitor was added, otherwise False.
@@ -33,13 +34,13 @@ class UptimeRobot(object):
         url += "&monitorURL=%s&monitorType=1" % monitorURL
         url += "&monitorAlertContacts=%s" % monitorAlertContacts
         url += "&noJsonCallback=1&format=json"
-
         sucess, response = self.requestApi(url)
         if sucess:
             return True
         else:
             return False
-
+        
+        
     def getMonitors(self):
         """ 
         Returns status and response payload for all known monitors.
@@ -47,12 +48,8 @@ class UptimeRobot(object):
         url = self.baseUrl
         url += "getMonitors?apiKey=%s" % (self.apiKey)
         url += "&noJsonCallback=1&format=json"
-
-        sucess, response = self.requestApi(url)
-        if sucess:
-            return status, response
-
-        return None, None
+        return self.requestApi(url)
+        
         
     def getMonitorById(self, monitorId):
         """
@@ -61,15 +58,14 @@ class UptimeRobot(object):
         url = self.baseUrl
         url += "getMonitors?apiKey=%s&monitors=%s" % (self.apiKey, monitorId)
         url += "&noJsonCallback=1&format=json"
-
         sucess, response = self.requestApi(url)
         if sucess:
             status = response.get('monitors').get('monitor')[0].get('status')
             alltimeuptimeratio = response.get('monitors').get('monitor')[0].get('alltimeuptimeratio')
             return status, alltimeuptimeratio
-
         return None, None
-
+        
+        
     def getMonitorByName(self, monitorFriendlyName):
         """
         Returns monitor status and alltimeuptimeratio for a MonitorFriendlyName.
@@ -77,7 +73,6 @@ class UptimeRobot(object):
         url = self.baseUrl
         url += "getMonitors?apiKey=%s" % self.apiKey
         url += "&noJsonCallback=1&format=json"
-
         sucess, response = self.requestApi(url)
         if sucess:
             monitors = response.get('monitors').get('monitor')
@@ -87,14 +82,13 @@ class UptimeRobot(object):
                     status = monitor.get('status')
                     alltimeuptimeratio = monitor.get('alltimeuptimeratio')
                     return status, alltimeuptimeratio
-
         return None, None
-
+        
+            
     def requestApi(self, url):
         response = urllib_request.urlopen(url)
         content = response.read().decode('utf-8')
         jContent = json.loads(content)
-
         if jContent.get('stat'):
             stat = jContent.get('stat')
             if stat == "ok":
