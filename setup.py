@@ -45,6 +45,10 @@ setup(
     There is a Django version (https://github.com/arteria/django-uptimerobot) available containing the Uptime Robot 
     API implementation and the infrastructure stuff used by Djangonauts. """,
     long_description=read('README.rst'),
+    classifiers=[
+          "Programming Language :: Python :: 2",
+          "Programming Language :: Python :: 3",
+    ],
     license='The MIT License',
     platforms=['OS Independent'],
     keywords='uptime robot, API, monitoring',
