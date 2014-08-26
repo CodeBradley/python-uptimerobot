@@ -48,6 +48,12 @@ Use in Shell: (success if return value is 0, null)
 History
 -------
 
+latest
+
+0.1.1 
+
+- Extended API with `.getMonitors()`.
+
 0.1.0
 
 - Releveled version
@@ -55,3 +61,8 @@ History
 0.0.7
 
 - Python 3.x support
+
+
+About the API
+-------------
+The full API is documented here: https://uptimerobot.com/api
