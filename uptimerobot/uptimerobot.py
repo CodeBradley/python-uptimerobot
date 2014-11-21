@@ -131,5 +131,5 @@ if __name__ == "__main__":
         print("A new Monitor was installed successfully")
         sys.exit(0)
     else:
-        print("There were some Errors, mayme the Monitor already exists?")
+        print("There were some Errors, maybe the Monitor already exists?")
         sys.exit(1)
