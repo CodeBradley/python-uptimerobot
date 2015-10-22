@@ -100,6 +100,21 @@ class UptimeRobot(object):
         return None, None
 
 
+    def deleteMonitorById(self, monitorID):
+        """
+        Returns True or False if monitor is deleted
+        """
+        url = self.baseUrl
+        url += "deleteMonitor?apiKey=%s" % self.apiKey
+        url += "&monitorID=%s" % monitorID
+        url += "&noJsonCallback=1&format=json"
+        sucess, response = self.requestApi(url)
+        if sucess:
+            return True
+        else:
+            return False
+
+
     def requestApi(self, url):
         response = urllib_request.urlopen(url)
         content = response.read().decode('utf-8')

@@ -50,6 +50,10 @@ History
 
 latest
 
+0.1.3
+
+- Extended API with `.deleteMonitorById()`.
+
 0.1.1 
 
 - Extended API with `.getMonitors()`.
