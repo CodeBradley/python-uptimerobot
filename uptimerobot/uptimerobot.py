@@ -22,8 +22,8 @@ class UptimeRobot(object):
     def __init__(self, apiKey):
         self.apiKey = apiKey
         self.baseUrl = "http://api.uptimerobot.com/"
-        
-        
+
+
     def addMonitor(self, monitorFriendlyName, monitorURL):
         """
         Returns True if Monitor was added, otherwise False.
@@ -39,8 +39,8 @@ class UptimeRobot(object):
             return True
         else:
             return False
-        
-        
+
+
     def getMonitors(self, response_times=0, logs=0, uptime_ratio=''):
         """
         Returns status and response payload for all known monitors.
@@ -64,8 +64,8 @@ class UptimeRobot(object):
             url += '&customUptimeRatio=%s' % uptime_ratio
 
         return self.requestApi(url)
-        
-        
+
+
     def getMonitorById(self, monitorId):
         """
         Returns monitor status and alltimeuptimeratio for a MonitorId.
@@ -79,8 +79,8 @@ class UptimeRobot(object):
             alltimeuptimeratio = response.get('monitors').get('monitor')[0].get('alltimeuptimeratio')
             return status, alltimeuptimeratio
         return None, None
-        
-        
+
+
     def getMonitorByName(self, monitorFriendlyName):
         """
         Returns monitor status and alltimeuptimeratio for a MonitorFriendlyName.
@@ -98,8 +98,8 @@ class UptimeRobot(object):
                     alltimeuptimeratio = monitor.get('alltimeuptimeratio')
                     return status, alltimeuptimeratio
         return None, None
-        
-            
+
+
     def requestApi(self, url):
         response = urllib_request.urlopen(url)
         content = response.read().decode('utf-8')
