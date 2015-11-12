@@ -34,8 +34,8 @@ class UptimeRobot(object):
         url += "&monitorURL=%s&monitorType=1" % monitorURL
         url += "&monitorAlertContacts=%s" % monitorAlertContacts
         url += "&noJsonCallback=1&format=json"
-        sucess, response = self.requestApi(url)
-        if sucess:
+        success, response = self.requestApi(url)
+        if success:
             return True
         else:
             return False
@@ -73,8 +73,8 @@ class UptimeRobot(object):
         url = self.baseUrl
         url += "getMonitors?apiKey=%s&monitors=%s" % (self.apiKey, monitorId)
         url += "&noJsonCallback=1&format=json"
-        sucess, response = self.requestApi(url)
-        if sucess:
+        success, response = self.requestApi(url)
+        if success:
             status = response.get('monitors').get('monitor')[0].get('status')
             alltimeuptimeratio = response.get('monitors').get('monitor')[0].get('alltimeuptimeratio')
             return status, alltimeuptimeratio
@@ -88,8 +88,8 @@ class UptimeRobot(object):
         url = self.baseUrl
         url += "getMonitors?apiKey=%s" % self.apiKey
         url += "&noJsonCallback=1&format=json"
-        sucess, response = self.requestApi(url)
-        if sucess:
+        success, response = self.requestApi(url)
+        if success:
             monitors = response.get('monitors').get('monitor')
             for i in range(len(monitors)):
                 monitor = monitors[i]
@@ -108,8 +108,8 @@ class UptimeRobot(object):
         url += "deleteMonitor?apiKey=%s" % self.apiKey
         url += "&monitorID=%s" % monitorID
         url += "&noJsonCallback=1&format=json"
-        sucess, response = self.requestApi(url)
-        if sucess:
+        success, response = self.requestApi(url)
+        if success:
             return True
         else:
             return False
@@ -138,6 +138,7 @@ if __name__ == "__main__":
         elif arg.startswith("apiKey="):
             apiKey = arg.split("=")[1]
     if not monitorFriendlyName or not monitorURL:
+        print "Usage: uptimerobot.py monitorFriendlyName=\"name\" monitorURL=\"www.url.com\""
         sys.exit(1)
 
     if not apiKey:
