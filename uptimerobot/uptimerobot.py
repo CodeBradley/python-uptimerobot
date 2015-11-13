@@ -21,7 +21,7 @@ monitorAlertContacts = ""
 class UptimeRobot(object):
     def __init__(self, apiKey):
         self.apiKey = apiKey
-        self.baseUrl = "http://api.uptimerobot.com/"
+        self.baseUrl = "https://api.uptimerobot.com/"
 
 
     def addMonitor(self, monitorFriendlyName, monitorURL):
