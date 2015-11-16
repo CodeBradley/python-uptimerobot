@@ -21,7 +21,7 @@ monitorAlertContacts = ""
 class UptimeRobot(object):
     def __init__(self, apiKey):
         self.apiKey = apiKey
-        self.baseUrl = "http://api.uptimerobot.com/"
+        self.baseUrl = "https://api.uptimerobot.com/"
 
 
     def addMonitor(self, monitorFriendlyName, monitorURL):
@@ -34,8 +34,8 @@ class UptimeRobot(object):
         url += "&monitorURL=%s&monitorType=1" % monitorURL
         url += "&monitorAlertContacts=%s" % monitorAlertContacts
         url += "&noJsonCallback=1&format=json"
-        sucess, response = self.requestApi(url)
-        if sucess:
+        success, response = self.requestApi(url)
+        if success:
             return True
         else:
             return False
@@ -73,8 +73,8 @@ class UptimeRobot(object):
         url = self.baseUrl
         url += "getMonitors?apiKey=%s&monitors=%s" % (self.apiKey, monitorId)
         url += "&noJsonCallback=1&format=json"
-        sucess, response = self.requestApi(url)
-        if sucess:
+        success, response = self.requestApi(url)
+        if success:
             status = response.get('monitors').get('monitor')[0].get('status')
             alltimeuptimeratio = response.get('monitors').get('monitor')[0].get('alltimeuptimeratio')
             return status, alltimeuptimeratio
@@ -88,8 +88,8 @@ class UptimeRobot(object):
         url = self.baseUrl
         url += "getMonitors?apiKey=%s" % self.apiKey
         url += "&noJsonCallback=1&format=json"
-        sucess, response = self.requestApi(url)
-        if sucess:
+        success, response = self.requestApi(url)
+        if success:
             monitors = response.get('monitors').get('monitor')
             for i in range(len(monitors)):
                 monitor = monitors[i]
@@ -100,6 +100,55 @@ class UptimeRobot(object):
         return None, None
 
 
+    def editMonitor(self, monitorID, monitorStatus=None, monitorFriendlyName=None, monitorURL=None, monitorType=None,
+                    monitorSubType=None, monitorPort=None, monitorKeywordType=None, monitorKeywordValue=None,
+                    monitorHTTPUsername=None, monitorHTTPPassword=None, monitorAlertContacts=None):
+        """
+        monitorID is the only required object. All others are optional and must be quoted.
+        Returns Response object from api.
+        """
+
+        url = self.baseUrl
+        url += "editMonitor?apiKey=%s" % self.apiKey
+        url += "&monitorID=%s" % monitorID
+        if monitorStatus:
+            # Pause, Start Montir
+            url += "&monitorStatus=%s" % monitorStatus
+        if monitorFriendlyName:
+            # Update their FriendlyName
+            url += "&monitorFriendlyName=%s" % monitorFriendlyName
+        if monitorURL:
+            # Edit the MontiorUrl
+            url += "&monitorURL=%s" % monitorURL
+        if monitorType:
+            # Edit the type of montior
+            url += "&monitorType=%s" % monitorType
+        if monitorSubType:
+            # Edit the SubType
+            url += "&monitorSubType=%s" % monitorSubType
+        if monitorPort:
+            # Edit the Port
+            url += "&monitorPort=%s" % monitorPort
+        if monitorKeywordType:
+            # Edit the Keyword Type
+            url += "&monitorKeywordType=%s" % monitorKeywordType
+        if monitorKeywordValue:
+            # Edit the Keyword Match
+            url += "&monitorKeywordValue=%s" % monitorKeywordValue
+        if monitorHTTPUsername:
+            # Edit the HTTP Username
+            url += "&monitorHTTPUsername=%s" % monitorHTTPUsername
+        if monitorHTTPPassword:
+            # Edit the HTTP Password
+            url += "&monitorHTTPPassword=%s" % monitorHTTPPassword
+        if monitorAlertContacts:
+            # Edit the contacts
+            url += "&monitorAlertContacts=%s" % monitorAlertContacts
+        url += "&noJsonCallback=1&format=json"
+        success = self.requestApi(url)
+        return success
+
+
     def deleteMonitorById(self, monitorID):
         """
         Returns True or False if monitor is deleted
@@ -108,8 +157,8 @@ class UptimeRobot(object):
         url += "deleteMonitor?apiKey=%s" % self.apiKey
         url += "&monitorID=%s" % monitorID
         url += "&noJsonCallback=1&format=json"
-        sucess, response = self.requestApi(url)
-        if sucess:
+        success, response = self.requestApi(url)
+        if success:
             return True
         else:
             return False
@@ -138,6 +187,7 @@ if __name__ == "__main__":
         elif arg.startswith("apiKey="):
             apiKey = arg.split("=")[1]
     if not monitorFriendlyName or not monitorURL:
+        print "Usage: uptimerobot.py monitorFriendlyName=\"name\" monitorURL=\"www.url.com\""
         sys.exit(1)
 
     if not apiKey:

@@ -50,6 +50,11 @@ History
 
 latest
 
+0.1.4
+
+- Extended API with `.editMonitor()`.
+- Updated to use HTTPs by default.
+
 0.1.3
 
 - Extended API with `.deleteMonitorById()`.
