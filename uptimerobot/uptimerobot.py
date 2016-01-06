@@ -172,8 +172,7 @@ class UptimeRobot(object):
             stat = jContent.get('stat')
             if stat == "ok":
                 return True, jContent
-        else:
-            return False, jContent
+        return False, jContent
 
 
 
