@@ -50,6 +50,10 @@ History
 
 latest
 
+0.1.5
+
+Fixed error where requestApi didn't return when the API request failed
+
 0.1.4
 
 - Extended API with `.editMonitor()`.
