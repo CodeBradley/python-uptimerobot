@@ -174,8 +174,47 @@ class UptimeRobot(object):
                 return True, jContent
         return False, jContent
 
+    def getAlertContacts(self, alertContacts=None, offset=None, limit=None):
+            """
+            Get Alert Contacts
+            """
+            url = self.baseUrl
+            url += "getAlertContacts?apiKey=%s" % self.apiKey
+            if alertContacts:
+                url += "&alertContacts=%s" % alertContacts
+            if offset:
+                url += "&offset=%s" % offset
+            if limit:
+                url += "&limit=%s" % limit
+            url += "&format=json"
+            return self.requestApi(url)
 
+    def getAlertContactIds(self, urlFormat=False):
+        ids = []
+        success, response = self.getAlertContacts()
+        if success:
+            alertContacts = response.get('alertcontacts').get('alertcontact')
+            for alertContact in alertContacts:
+                ids.append(alertContact.get('id'))
+        if urlFormat:
+            formatted = ""
+            for id in ids:
+                formatted += id + "-"
+            return formatted[:-1]
+        else:
+            return ids
 
+    def getMonitorId(self, name):
+        success, response = self.getMonitors()
+        if success:
+            monitors = response.get('monitors').get('monitor')
+            for monitor in monitors:
+                if monitor['friendlyname'] == name:
+                    return monitor['id']
+        return None
+
+    def deleteMonitorByName(self, name):
+        return self.deleteMonitorById(self.getMonitorId(name))
 
 if __name__ == "__main__":
     for arg in sys.argv:
