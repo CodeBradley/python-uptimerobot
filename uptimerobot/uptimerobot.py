@@ -17,6 +17,7 @@ monitorURL = None
 apiKey = None
 monitorAlertContacts = ""
 
+MONITORS_PER_PAGE = 50
 
 class UptimeRobot(object):
     def __init__(self, apiKey):
@@ -41,7 +42,7 @@ class UptimeRobot(object):
             return False
 
 
-    def getMonitors(self, response_times=0, logs=0, uptime_ratio=''):
+    def getMonitors(self, response_times=0, logs=0, uptime_ratio='', offset=None, limit=None):
         """
         Returns status and response payload for all known monitors.
         """
@@ -62,6 +63,10 @@ class UptimeRobot(object):
         # uptime ratios for those periods)
         if uptime_ratio:
             url += '&customUptimeRatio=%s' % uptime_ratio
+        if offset is not None:
+            url += "&offset=%s" % offset
+        if limit is not None:
+            url += "&limit=%s" % limit
 
         return self.requestApi(url)
 
@@ -215,6 +220,18 @@ class UptimeRobot(object):
 
     def deleteMonitorByName(self, name):
         return self.deleteMonitorById(self.getMonitorId(name))
+
+    def iterMonitors(self, response_times=0, logs=0, uptime_ratio=''):
+        "Iterate all monitors."
+        total = None
+        offset = 0
+        while total is None or offset < total:
+            response = self.getMonitors(response_times, logs, uptime_ratio, offset=offset, limit=MONITORS_PER_PAGE)
+            if total is None:
+                total = int(response[1]['total'])
+            offset += MONITORS_PER_PAGE
+            for m in response[1]['monitors']['monitor']:
+                yield m
 
 if __name__ == "__main__":
     for arg in sys.argv:
