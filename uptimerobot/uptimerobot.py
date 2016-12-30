@@ -73,7 +73,8 @@ class UptimeRobot(object):
             url += "&search=%s" % search
         if monitors is not None:
             url += "&monitors=%s" % '-'.join(str(m) for m in monitors)
-
+            pass
+        url += "&noJsonCallback=1&format=json"
         return self.requestApi(url)
 
 
@@ -164,29 +165,10 @@ class UptimeRobot(object):
         else:
             return False
 
-    def strangeJsonUnpack(self, jsonContent):
-        '''
-        some responses have a strange container: "jsonUptimeRobotApi([json content here])"
-        '''
-        jsonContent = jsonContent.strip()
-        if jsonContent.find("jsonUptimeRobotApi(") == 0:
-            sys.stderr.write("w")
-            retval = jsonContent[19:-1]
-        else:
-            sys.stderr.write(".")
-            retval = jsonContent
-        return retval
-    
     def requestApi(self, url):
         response = urllib_request.urlopen(url)
         content = self.strangeJsonUnpack(response.read().decode('utf-8'))
-        
-        try:
-            jContent = json.loads(content)
-        except:
-            sys.stderr.write('Content Wrapper Error:\n%s\n' % content)
-            pass
-        
+        jContent = json.loads(content)
         if jContent.get('stat'):
             stat = jContent.get('stat')
             if stat == "ok":
@@ -201,11 +183,14 @@ class UptimeRobot(object):
             url += "getAlertContacts?apiKey=%s" % self.apiKey
             if alertContacts:
                 url += "&alertContacts=%s" % alertContacts
+                pass
             if offset:
                 url += "&offset=%s" % offset
+                pass
             if limit:
                 url += "&limit=%s" % limit
-            url += "&format=json"
+                pass
+            url += "&noJsonCallback=1&format=json"
             return self.requestApi(url)
 
     def getAlertContactIds(self, urlFormat=False):
