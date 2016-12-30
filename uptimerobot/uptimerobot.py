@@ -167,7 +167,7 @@ class UptimeRobot(object):
 
     def requestApi(self, url):
         response = urllib_request.urlopen(url)
-        content = self.strangeJsonUnpack(response.read().decode('utf-8'))
+        content = response.read().decode('utf-8')
         jContent = json.loads(content)
         if jContent.get('stat'):
             stat = jContent.get('stat')
