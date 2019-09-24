@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 try:
     import urllib.request as urllib_request
 except ImportError:
@@ -17,6 +19,7 @@ monitorURL = None
 apiKey = None
 monitorAlertContacts = ""
 
+MONITORS_PER_PAGE = 50
 
 class UptimeRobot(object):
     def __init__(self, apiKey):
@@ -41,7 +44,7 @@ class UptimeRobot(object):
             return False
 
 
-    def getMonitors(self, response_times=0, logs=0, uptime_ratio=''):
+    def getMonitors(self, response_times=0, logs=0, uptime_ratio='', offset=None, limit=None, search=None, monitors=None):
         """
         Returns status and response payload for all known monitors.
         """
@@ -62,42 +65,41 @@ class UptimeRobot(object):
         # uptime ratios for those periods)
         if uptime_ratio:
             url += '&customUptimeRatio=%s' % uptime_ratio
-
+        if offset is not None:
+            url += "&offset=%s" % offset
+        if limit is not None:
+            url += "&limit=%s" % limit
+        if search is not None:
+            url += "&search=%s" % search
+        if monitors is not None:
+            url += "&monitors=%s" % '-'.join(str(m) for m in monitors)
+            pass
+        url += "&noJsonCallback=1&format=json"
         return self.requestApi(url)
 
 
     def getMonitorById(self, monitorId):
         """
-        Returns monitor status and alltimeuptimeratio for a MonitorId.
+        Returns monitor by MonitorId.
         """
-        url = self.baseUrl
-        url += "getMonitors?apiKey=%s&monitors=%s" % (self.apiKey, monitorId)
-        url += "&noJsonCallback=1&format=json"
-        success, response = self.requestApi(url)
-        if success:
-            status = response.get('monitors').get('monitor')[0].get('status')
-            alltimeuptimeratio = response.get('monitors').get('monitor')[0].get('alltimeuptimeratio')
-            return status, alltimeuptimeratio
-        return None, None
+        try:
+            monitor = self.iterMonitors(monitors=[monitorId]).next()
+        except StopIteration:
+            return None
+        return monitor
 
 
     def getMonitorByName(self, monitorFriendlyName):
         """
-        Returns monitor status and alltimeuptimeratio for a MonitorFriendlyName.
+        Returns monitor by MonitorFriendlyName.
         """
-        url = self.baseUrl
-        url += "getMonitors?apiKey=%s" % self.apiKey
-        url += "&noJsonCallback=1&format=json"
-        success, response = self.requestApi(url)
-        if success:
-            monitors = response.get('monitors').get('monitor')
-            for i in range(len(monitors)):
-                monitor = monitors[i]
-                if monitor.get('friendlyname') == monitorFriendlyName:
-                    status = monitor.get('status')
-                    alltimeuptimeratio = monitor.get('alltimeuptimeratio')
-                    return status, alltimeuptimeratio
-        return None, None
+        try:
+            monitor = self.iterMonitors(search=monitorFriendlyName).next()
+        except StopIteration:
+            return None
+        if monitor['friendlyname'] != monitorFriendlyName:
+            return None
+        return monitor
 
 
     def editMonitor(self, monitorID, monitorStatus=None, monitorFriendlyName=None, monitorURL=None, monitorType=None,
@@ -163,7 +165,6 @@ class UptimeRobot(object):
         else:
             return False
 
-
     def requestApi(self, url):
         response = urllib_request.urlopen(url)
         content = response.read().decode('utf-8')
@@ -182,11 +183,14 @@ class UptimeRobot(object):
             url += "getAlertContacts?apiKey=%s" % self.apiKey
             if alertContacts:
                 url += "&alertContacts=%s" % alertContacts
+                pass
             if offset:
                 url += "&offset=%s" % offset
+                pass
             if limit:
                 url += "&limit=%s" % limit
-            url += "&format=json"
+                pass
+            url += "&noJsonCallback=1&format=json"
             return self.requestApi(url)
 
     def getAlertContactIds(self, urlFormat=False):
@@ -216,6 +220,20 @@ class UptimeRobot(object):
     def deleteMonitorByName(self, name):
         return self.deleteMonitorById(self.getMonitorId(name))
 
+    def iterMonitors(self, response_times=0, logs=0, uptime_ratio='', search=None, monitors=None):
+        "Iterate all monitors."
+        total = None
+        offset = 0
+        while total is None or offset < total:
+            response = self.getMonitors(response_times, logs, uptime_ratio, offset=offset, limit=MONITORS_PER_PAGE, search=search, monitors=monitors)
+            if not response[0]:
+                return
+            if total is None:
+                total = int(response[1]['total'])
+            offset += MONITORS_PER_PAGE
+            for m in response[1]['monitors']['monitor']:
+                yield m
+
 if __name__ == "__main__":
     for arg in sys.argv:
         if arg.startswith("monitorFriendlyName="):
@@ -225,7 +243,7 @@ if __name__ == "__main__":
         elif arg.startswith("apiKey="):
             apiKey = arg.split("=")[1]
     if not monitorFriendlyName or not monitorURL:
-        print "Usage: uptimerobot.py monitorFriendlyName=\"name\" monitorURL=\"www.url.com\""
+        print ("Usage: uptimerobot.py monitorFriendlyName=\"name\" monitorURL=\"www.url.com\"")
         sys.exit(1)
 
     if not apiKey:
